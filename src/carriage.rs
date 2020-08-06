@@ -51,9 +51,19 @@ impl Carriage {
         stream.read(&mut buffer).unwrap();
 
         let request = String::from_utf8_lossy(&buffer[..]);
-        let method = self.get_method(Some(&request[..]));
+        
         let url = self.get_url(Some(&request[..]));
-        println!("{:?}, {:?}", method.unwrap(), url.unwrap());
+        let method = match self.get_method(Some(&request[..])) {
+            Ok(m) => {self.decide_method(&m)},
+            Err(e) => { method::Method::NONE }
+        };
+
+        match &url {
+            Ok(url) => self.router.check_routes(&method, &url),
+            Err(e) => println!("{}",e)
+        }
+
+        println!("{:?}, {:?}", method, url.unwrap());
 
         let contents = fs::read_to_string("hello.html").unwrap();
 
@@ -83,6 +93,21 @@ impl Carriage {
         }
     }
 
+    fn decide_method(&self, method_string: &str) -> method::Method {
+        match method_string {
+            "GET" => method::Method::GET,
+            "POST" => method::Method::POST,
+            "PUT" => method::Method::PUT,
+            "PATCH" => method::Method::PATCH,
+            "DELETE" => method::Method::DELETE,
+            "OPTIONS" => method::Method::OPTIONS,
+            "HEAD" => method::Method::HEAD,
+            _ => method::Method::NONE
+        }
+    }
+
+
+    ///URL parser yapılacak url içerisindeki /'ları ayıracak "/users/:id"
     fn get_url<'a>(&self, request: Option<&'a str>) -> Result<String, String> {
         match request {
             Some(request) => {
@@ -97,5 +122,7 @@ impl Carriage {
             }
         }
     }
+
+
 }
 

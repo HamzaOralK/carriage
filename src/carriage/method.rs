@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Method {
     GET,
     POST,
@@ -6,5 +6,6 @@ pub enum Method {
     PATCH,
     DELETE,
     OPTIONS,
-    HEAD
+    HEAD,
+    NONE
 }

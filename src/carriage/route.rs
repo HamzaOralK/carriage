@@ -16,10 +16,6 @@ impl Route {
         }
     }
 
-    // pub fn set_callback(&mut self, c: Callback) {
-    //     self.callback = c;
-    // }
-
     pub fn process_events(&self) {
         println!("process events");
         (self.callback)();
