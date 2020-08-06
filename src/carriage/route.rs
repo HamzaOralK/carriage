@@ -8,10 +8,10 @@ pub struct Route {
 }
 
 impl Route {
-    pub fn new<'a> (method: Method, path: String, callback: Callback) -> Route {
+    pub fn new<'a> (method: Method, path: &str, callback: Callback) -> Route {
         Route {
             method,
-            path,
+            path: path.to_string(),
             callback
         }
     }
