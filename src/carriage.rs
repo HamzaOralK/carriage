@@ -2,34 +2,44 @@ use std::fs;
 use std::io::prelude::*;
 use std::net::TcpStream;
 use std::net::TcpListener;
+use std::ptr;
+
 
 pub mod router;
 pub mod method;
+pub mod route;
 
 pub struct Carriage {
     // router: Router,
     listener: TcpListener,
-    routers: Vec<router::Router>
+    pub router: router::Router
 }
 
 impl Carriage {
 
-    pub fn new(address: &str, port: &str) -> Carriage {
+    pub fn new(address: &str, port: &str, router: router::Router) -> Carriage {
         let mut ip: String = address.to_owned();
         let port: String = port.to_owned();
         ip.push_str(":");
         ip.push_str(&port);
-        Carriage {
-            listener:  TcpListener::bind(ip).unwrap_or_else(|err| {
-                println!("Problem parsing arguments: {}", err);
+        let listener = match TcpListener::bind(ip) {
+            Ok(listener) => listener,
+            Err(e) => {
+                println!("Problem parsing arguments: {}", e);
                 std::process::exit(1);
-            }),
-            routers: Vec::new()
+            }
+        };
+        Carriage {
+            listener: listener,
+            router: router
         }
     }
 
     pub fn connect(&self) {
-
+        for r in &self.router.routes {
+            println!("{}, {:?}", r.path, r.method);
+        }
+        
         for stream in self.listener.incoming() {
             let stream = stream.unwrap();
             self.handle_request(stream);
@@ -42,6 +52,8 @@ impl Carriage {
 
         let request = String::from_utf8_lossy(&buffer[..]);
         let method = self.get_method(Some(&request[..]));
+        let url = self.get_url(Some(&request[..]));
+        println!("{:?}, {:?}", method, url);
 
         let contents = fs::read_to_string("hello.html").unwrap();
 
@@ -55,19 +67,36 @@ impl Carriage {
         stream.flush().unwrap();
     }
 
-    fn get_method<'a>(&self, request: Option<&'a str>) -> Option<&'a str> {
+    fn get_method<'a>(&self, request: Option<&'a str>) -> Result<&'a str, &str> {
         match request {
             Some(request) => {
                 let x = &request.find(" ");
-                let slice: &str;
-                slice = &request[0..x.unwrap()];
-                return Some(slice);
+                let slice = match x {
+                    Some(x) => &request[0..*x],
+                    None => { "" }
+                };
+                return Ok(slice);
             },
             None => {
-                None
+                Err("No request")
             }
         }
-        
+    }
+
+    fn get_url<'a>(&self, request: Option<&'a str>) -> Result<&'a str, &str> {
+        match request {
+            Some(request) => {
+                let first_result = &request.find(" ").unwrap_or(0);
+                let sliced_first = &request[*first_result..];
+                let second_result = sliced_first.find(" ").unwrap_or(0);
+                
+                let final_slice = &request[*first_result..second_result];
+                return Ok(final_slice);
+            },
+            None => {
+                Err("No request")
+            }
+        }
     }
 }
 

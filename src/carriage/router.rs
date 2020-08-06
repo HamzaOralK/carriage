@@ -1,32 +1,20 @@
-use crate::carriage::method;
-pub type Callback = fn();
+use crate::carriage::route::Route;
 
-pub struct Router { }
-
-pub struct Route {
-    method: method::Method,
-    path: String,
-    callback: Callback
+pub struct Router {
+    pub routes: Vec<Route>,
+    pub name: String
 }
 
-impl Route {
-    pub fn new<'a> (method: method::Method, path: String, callback: Callback) -> Route {
-        Route {
-            method,
-            path,
-            callback
+impl Router {
+    pub fn new(name: &str) -> Router {
+        Router {
+            routes: Vec::new(),
+            name: name.to_string()
         }
     }
 
-    // pub fn set_callback(&mut self, c: Callback) {
-    //     self.callback = c;
-    // }
-
-    pub fn process_events(&self) {
-        println!("process events");
-        (self.callback)();
+    pub fn add_route<'a> (&'a mut self, route: Route) {
+        self.routes.push(route);
     }
 }
-
-
 
