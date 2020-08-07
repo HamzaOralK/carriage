@@ -2,12 +2,13 @@ use std::fs;
 use std::io::prelude::*;
 use std::net::TcpStream;
 use std::net::TcpListener;
-use std::ptr;
 
 
 pub mod router;
 pub mod method;
 pub mod route;
+pub mod request;
+pub mod response;
 
 pub struct Carriage {
     // router: Router,
@@ -57,20 +58,28 @@ impl Carriage {
             Ok(m) => {self.decide_method(&m)},
             Err(e) => { method::Method::NONE }
         };
+        let body = String::from("test body");
 
-        match &url {
-            Ok(url) => self.router.check_routes(&method, &url),
-            Err(e) => println!("{}",e)
-        }
 
-        println!("{:?}, {:?}", method, url.unwrap());
+        let res = match &url {
+            Ok(url) => {
+                let request = request::Request::new(&url, &method, &body);
+                self.router.check_routes(&method, &url, request)
+            },
+            Err(e) => {
+                response::Response { code: "404", body: "{\"error\": \"No response.\"}" }
+            }
+        };
+
+        println!("{:?}", res);
 
         let contents = fs::read_to_string("hello.html").unwrap();
 
         let response = format!(
-            "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
-            contents.len(),
-            contents
+            "HTTP/1.1 {} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}",
+            res.code,
+            res.body.len(),
+            res.body
         );
 
         stream.write(response.as_bytes()).unwrap();

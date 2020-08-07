@@ -1,3 +1,5 @@
+use crate::carriage::response::Response;
+use crate::carriage::request::Request;
 use crate::carriage::route::Route;
 use crate::carriage::method::Method;
 
@@ -18,12 +20,17 @@ impl Router {
         self.routes.push(route);
     }
 
-    pub fn check_routes(&self, method: &Method, path: &str) {
+    pub fn check_routes<'a>(&'a self, method: &'a Method, path: &'a str, req: Request) -> Response<'a> {
         let route_index = self.routes.iter().position(|r| r.path == path && r.method == *method);
         match route_index {
-            Some(r) => { self.routes[r].process_events() },
-            None => {println!("Route haven't found!")}
-        }
+            Some(r) => { 
+                let res = self.routes[r].process_events(req);
+                return res; 
+            },
+            None => {
+                return Response { code: "404", body: "olmadı" };
+            }
+        };
     }
 }
 

@@ -1,5 +1,8 @@
 use crate::carriage::method::Method;
-pub type Callback = fn();
+use crate::carriage::request::Request;
+use crate::carriage::response::Response;
+
+pub type Callback = fn(req: Request) -> Response<'static>;
 
 pub struct Route {
     pub method: Method,
@@ -8,16 +11,17 @@ pub struct Route {
 }
 
 impl Route {
-    pub fn new<'a> (method: Method, path: &str, callback: Callback) -> Route {
+    pub fn new (method: Method, path: &str, callback: Callback) -> Route {
         Route {
             method,
             path: path.to_string(),
-            callback
+            callback: callback
         }
     }
 
-    pub fn process_events(&self) {
+    pub fn process_events(&self, req: Request) -> Response {
         println!("process events");
-        (self.callback)();
+        let res = (self.callback)(req);
+        return res;
     }
 }
