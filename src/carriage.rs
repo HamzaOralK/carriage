@@ -3,12 +3,13 @@ use std::io::prelude::*;
 use std::net::TcpStream;
 use std::net::TcpListener;
 
-
 pub mod router;
 pub mod method;
 pub mod route;
 pub mod request;
 pub mod response;
+pub mod threadPool;
+
 
 pub struct Carriage {
     // router: Router,
@@ -40,7 +41,6 @@ impl Carriage {
         for r in &self.router.routes {
             println!("{}, {:?}", r.path, r.method);
         }
-        
         for stream in self.listener.incoming() {
             let stream = stream.unwrap();
             self.handle_request(stream);
@@ -60,14 +60,13 @@ impl Carriage {
         };
         let body = String::from("test body");
 
-
         let res = match &url {
             Ok(url) => {
                 let request = request::Request::new(&url, &method, &body);
                 self.router.check_routes(&method, &url, request)
             },
             Err(e) => {
-                response::Response { code: "404", body: "{\"error\": \"No response.\"}" }
+                response::Response { code: "404", body: "{\"error\": \"No responser\"}" }
             }
         };
 
