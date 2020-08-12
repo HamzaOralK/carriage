@@ -3,6 +3,7 @@ use crate::carriage::request::Request;
 use crate::carriage::route::Route;
 use crate::carriage::method::Method;
 
+#[derive(Clone)]
 pub struct Router {
     pub routes: Vec<Route>,
     pub name: String

@@ -4,6 +4,7 @@ use crate::carriage::response::Response;
 
 pub type Callback = fn(req: Request) -> Response<'static>;
 
+#[derive(Clone)]
 pub struct Route {
     pub method: Method,
     pub path: String,
