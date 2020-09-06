@@ -2,33 +2,26 @@ mod carriage;
 use carriage::router::Router;
 use carriage::route::Route;
 use carriage::response::Response;
-use carriage::request::Request;
+use carriage::request::*;
 use carriage::method::Method;
-use std::time::Duration;
-use std::thread;
 
 fn main() {
     let mut cr = carriage::Carriage::new("127.0.0.1", "7878", Router::new("my route"));
-    let test_route = Route::new(Method::GET, "/users", test);
-    let second_test_route = Route::new(Method::GET, "/products", test2);
-
+    let test_route = Route::new(Method::GET, "/users", test1);
     cr.router.add_route(test_route);
-    cr.router.add_route(second_test_route);
-
     cr.connect();
-
 }
 
 
-fn test(req: Request) -> Response<'static> {
-    println!("{:?}", req);
+#[derive(Clone, Copy, Debug)]
+pub struct my_body<'a> {
+    test: &'a str,
+}
+
+impl<'a> SimpleBody for my_body<'a> {}
+
+
+fn test1(req: Request<my_body>) -> Response<'static> {
     let res = Response { code: "200", body: "{\"test\": 123}"};
-    thread::sleep(Duration::from_millis(4000));
-    res
-}
-
-fn test2(req: Request) -> Response<'static> {
-    println!("{:?}", req);
-    let res = Response { code: "200", body: "{\"test\": 123444}"};
     res
 }
