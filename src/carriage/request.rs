@@ -1,12 +1,11 @@
 use std::collections::BTreeMap;
 use crate::carriage::method::Method;
 use std::fmt::Debug;
-use std::marker::Copy;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize};
 
 
 pub trait SimpleBody { }
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct SimpleBodyData {
     pub data: BTreeMap<String, String>
 }
@@ -22,29 +21,20 @@ impl SimpleBodyData {
 }
 
 #[derive(Debug, Clone)]
-pub struct Request<'a, T>
-where
-    T: SimpleBody + Copy + Clone + Debug,
+pub struct Request<'a>
 {
-    body: Option<T>,
-    method: &'a Method,
-    url: &'a str,
+    pub body: SimpleBodyData,
+    pub method: &'a Method,
+    pub url: &'a str,
 }
 
 pub trait Req<'a> {
-    type inner_type: SimpleBody + Copy + Clone + Debug;
-    // fn new(url: &'a str, method: Method, body: Self::inner_type,) -> Self;
-    fn new(url: &'a str, method: &'a Method) -> Self;
+    fn new(url: &'a str, method: &'a Method, body: SimpleBodyData,) -> Self;
 }
 
-impl<'a, T> Req<'a> for Request<'a, T>
-where
-    T: SimpleBody + Copy + Clone + Debug,
+impl<'a> Req<'a> for Request<'a>
 {
-    type inner_type = T;
-
-    // fn new(url: &'a str, method: Method, body: T) -> Self {
-    fn new(url: &'a str, method: &'a Method) -> Self {
-        Request { body: None, method, url }
+    fn new(url: &'a str, method: &'a Method, body: SimpleBodyData) -> Self {
+        Request { body, method, url }
     }
 }

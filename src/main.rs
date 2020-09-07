@@ -6,22 +6,30 @@ use carriage::request::*;
 use carriage::method::Method;
 
 fn main() {
-    let mut cr = carriage::Carriage::new("127.0.0.1", "7878", Router::new("my route"));
-    let test_route = Route::new(Method::GET, "/users", test1);
-    cr.router.add_route(test_route);
-    cr.connect();
+    let mut router = Router::new("my route");
+    let mut cr = carriage::Carriage::new("127.0.0.1", "7878", &mut router);
+    let test_route: Route = Route::new(Method::GET, "/users", test1);
+    let test_route2: Route = Route::new(Method::GET, "/products", test2);
+    &cr.router.add_route(&test_route);
+    &cr.router.add_route(&test_route2);
+    &cr.connect();
 }
 
 
-#[derive(Clone, Copy, Debug)]
-pub struct my_body<'a> {
-    test: &'a str,
+fn test1(req: Request) -> Response<'static> {
+    let body = req.body;
+    if body.data["productId"] == "test" {
+        println!("güzel product");
+    }
+    let res = Response { code: "200", body: "asdasd"};
+    res
 }
 
-impl<'a> SimpleBody for my_body<'a> {}
-
-
-fn test1(req: Request<my_body>) -> Response<'static> {
-    let res = Response { code: "200", body: "{\"test\": 123}"};
+fn test2(req: Request) -> Response<'static> {
+    let body = req.body;
+    if body.data["productId"] == "test" {
+        println!("güzel product");
+    }
+    let res = Response { code: "200", body: "products"};
     res
 }

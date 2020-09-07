@@ -2,32 +2,28 @@ use crate::carriage::response::Response;
 use crate::carriage::request::Request;
 use crate::carriage::route::Route;
 use crate::carriage::method::Method;
-use crate::carriage::request::*;
-use std::fmt::Debug;
 
 #[derive(Clone)]
-pub struct Router<T>
-    where T: SimpleBody + Copy + Debug
+pub struct Router<'a>
 {
-    pub routes: Vec<Route<T>>,
-    pub name: String
+    pub routes: Vec<&'a Route>,
+    pub name: &'a str
 }
 
-impl<T> Router<T> 
-    where T: SimpleBody + Copy + Debug
+impl<'a> Router<'a> 
 {
-    pub fn new(name: &str) -> Router<T> {
+    pub fn new(name: &str) -> Router {
         Router {
             routes: Vec::new(),
-            name: name.to_string()
+            name: name
         }
     }
 
-    pub fn add_route<'a> (&'a mut self, route: Route<T>) {
+    pub fn add_route (&mut self, route: &'a Route) {
         self.routes.push(route);
     }
 
-    pub fn check_routes<'a>(&'a self, method: &'a Method, path: &'a str, req: Request<T>) -> Response<'a> {
+    pub fn check_routes(&'a self, method: &'a Method, path: &'a str, req: Request) -> Response<'a> {
         let route_index = self.routes.iter().position(|r| r.path == path && r.method == *method);
         match route_index {
             Some(r) => { 

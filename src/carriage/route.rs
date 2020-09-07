@@ -1,23 +1,20 @@
 use crate::carriage::method::Method;
 use crate::carriage::request::*;
 use crate::carriage::response::Response;
-use std::fmt::Debug;
 
-pub type Callback<T> = fn(req: Request<T>) -> Response<'static>;
+pub type Callback = fn(req: Request) -> Response<'static>;
 
 #[derive(Clone)]
-pub struct Route<T> 
-    where T: SimpleBody + Copy + Clone + Debug
+pub struct Route
 {
     pub method: Method,
     pub path: String,
-    pub callback: Callback<T>
+    pub callback: Callback
 }
 
-impl<T> Route<T> 
-    where T: SimpleBody + Copy + Clone + Debug 
+impl Route
 {
-    pub fn new (method: Method, path: &str, callback: Callback<T>) -> Route<T> {
+    pub fn new (method: Method, path: &str, callback: Callback) -> Route {
         Route {
             method,
             path: path.to_string(),
@@ -25,7 +22,7 @@ impl<T> Route<T>
         }
     }
 
-    pub fn process_events(&self, req: Request<T>) -> Response {
+    pub fn process_events(&self, req: Request) -> Response {
         let res = (self.callback)(req);
         return res;
     }

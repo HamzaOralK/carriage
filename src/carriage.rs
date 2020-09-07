@@ -2,9 +2,6 @@ use std::io::prelude::*;
 use std::net::TcpStream;
 use std::net::TcpListener;
 use std::clone::Clone;
-use std::fmt::Debug;
-
-use serde::{Serialize, Deserialize};
 
 pub mod router;
 pub mod method;
@@ -15,19 +12,15 @@ pub mod thread_pool;
 
 use request::*;
 
-
-pub struct Carriage<T>
-    where T: request::SimpleBody + Copy + Clone + Debug
+pub struct Carriage<'a>
 {
     listener: TcpListener,
-    pub router: router::Router<T>
+    pub router: &'a mut router::Router<'a>
 }
 
-impl<'a, T> Carriage<T> 
-    where T: request::SimpleBody + Copy + Clone + Debug
+impl<'a> Carriage <'a>
 {
-
-    pub fn new(address: &str, port: &str, router: router::Router<T>) -> Carriage<T> {
+    pub fn new(address: &str, port: &str, router: &'a mut router::Router<'a>) -> Carriage<'a> {
         let mut ip: String = address.to_owned();
         let port: String = port.to_owned();
         ip.push_str(":");
@@ -41,11 +34,11 @@ impl<'a, T> Carriage<T>
         };
         Carriage {
             listener,
-            router: router
+            router
         }
     }
 
-    pub fn connect(&self) {
+    pub fn connect(&'a mut self) {
         for stream in self.listener.incoming() {
             let f = self.router.clone();
             let stream = stream.unwrap();
@@ -107,12 +100,10 @@ fn get_body<'a> (request: &'a str) -> Result<SimpleBodyData, String>
     let second_result = sliced_first.find("\u{0}").unwrap_or(0);
     let final_slice = &sliced_first[..second_result];
     let deserialized: SimpleBodyData = SimpleBodyData::new(serde_json::from_str(final_slice).unwrap());
-    println!("{:?}", deserialized.data["productId"]);
     Ok(deserialized)
 }
 
-fn handle_request<T>(router: router::Router<T>, mut stream: TcpStream)
-    where T: SimpleBody + Copy + Clone + Debug
+fn handle_request(router: router::Router, mut stream: TcpStream)
 {
     let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
@@ -121,14 +112,13 @@ fn handle_request<T>(router: router::Router<T>, mut stream: TcpStream)
     let url = get_url(Some(&request[..]));
     let method = match get_method(Some(&request[..])) {
         Ok(m) => {decide_method(&m)},
-        Err(e) => { method::Method::NONE }
+        Err(_e) => { method::Method::NONE }
     };
 
     let res = match &url {
         Ok(url) => {
             let body = get_body(&request).unwrap();
-            println!("{:?}", body);
-            let request = Request::new(&url, &method);
+            let request = Request::new(&url, &method, body);
             router.check_routes(&method, &url, request)
         },
         Err(e) => {
