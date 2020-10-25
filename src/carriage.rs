@@ -47,20 +47,6 @@ impl<'a> Carriage <'a>
     }
 }
 
-
-fn decide_method(method_string: &str) -> method::Method {
-    match method_string {
-        "GET" => method::Method::GET,
-        "POST" => method::Method::POST,
-        "PUT" => method::Method::PUT,
-        "PATCH" => method::Method::PATCH,
-        "DELETE" => method::Method::DELETE,
-        "OPTIONS" => method::Method::OPTIONS,
-        "HEAD" => method::Method::HEAD,
-        _ => method::Method::NONE
-    }
-}
-
 fn get_method<'a>(request: Option<&'a str>) -> Result<String, String> {
     match request {
         Some(request) => {
@@ -74,6 +60,19 @@ fn get_method<'a>(request: Option<&'a str>) -> Result<String, String> {
         None => {
             Err("No request".to_string())
         }
+    }
+}
+
+fn decide_method(method_string: &str) -> method::Method {
+    match method_string {
+        "GET" => method::Method::GET,
+        "POST" => method::Method::POST,
+        "PUT" => method::Method::PUT,
+        "PATCH" => method::Method::PATCH,
+        "DELETE" => method::Method::DELETE,
+        "OPTIONS" => method::Method::OPTIONS,
+        "HEAD" => method::Method::HEAD,
+        _ => method::Method::NONE
     }
 }
 
@@ -115,11 +114,12 @@ fn handle_request(router: router::Router, mut stream: TcpStream)
         Err(_e) => { method::Method::NONE }
     };
 
-    let res = match &url {
+    let res = match url {
         Ok(url) => {
             let body = get_body(&request).unwrap();
             let request = Request::new(&url, &method, body);
-            router.check_routes(&method, &url, request)
+            let response = router.check_routes(request);
+            response
         },
         Err(e) => {
             println!("{}", e);

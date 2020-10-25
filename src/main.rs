@@ -5,10 +5,11 @@ use carriage::response::Response;
 use carriage::request::*;
 use carriage::method::Method;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let mut router = Router::new("my route");
     let mut cr = carriage::Carriage::new("127.0.0.1", "7878", &mut router);
-    let test_route: Route = Route::new(Method::GET, "/users", test1);
+    let test_route: Route = Route::new(Method::POST, "/users", test1);
     let test_route2: Route = Route::new(Method::GET, "/products", test2);
     &cr.router.add_route(&test_route);
     &cr.router.add_route(&test_route2);
@@ -27,9 +28,9 @@ fn test1(req: Request) -> Response<'static> {
 
 fn test2(req: Request) -> Response<'static> {
     let body = req.body;
+    let mut res = Response { code: "200", body: "products"};
     if body.data["productId"] == "test" {
-        println!("güzel product");
+        res.body = "güzel product";
     }
-    let res = Response { code: "200", body: "products"};
     res
 }
