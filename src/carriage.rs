@@ -9,6 +9,7 @@ pub mod route;
 pub mod request;
 pub mod response;
 pub mod thread_pool;
+pub mod codes;
 
 use request::*;
 
@@ -123,7 +124,7 @@ fn handle_request(router: router::Router, mut stream: TcpStream)
         },
         Err(e) => {
             println!("{}", e);
-            response::Response { code: "404", body: "{\"error\": \"No responser\"}" }
+            response::Response { code: codes::HttpCodes::NotFound, body: "{\"error\": \"No responser\"}" }
         }
     };
 

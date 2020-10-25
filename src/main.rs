@@ -4,6 +4,7 @@ use carriage::route::Route;
 use carriage::response::Response;
 use carriage::request::*;
 use carriage::method::Method;
+use carriage::codes::HttpCodes;
 
 #[tokio::main]
 async fn main() {
@@ -18,17 +19,18 @@ async fn main() {
 
 
 fn test1(req: Request) -> Response<'static> {
+    println!("{:?}", req.body.data["productId"]);
     let body = req.body;
     if body.data["productId"] == "test" {
         println!("güzel product");
     }
-    let res = Response { code: "200", body: "asdasd"};
+    let res = Response { code: HttpCodes::OK, body: "asdasd"};
     res
 }
 
 fn test2(req: Request) -> Response<'static> {
     let body = req.body;
-    let mut res = Response { code: "200", body: "products"};
+    let mut res = Response { code: HttpCodes::OK, body: "products"};
     if body.data["productId"] == "test" {
         res.body = "güzel product";
     }

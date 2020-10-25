@@ -1,7 +1,7 @@
 use crate::carriage::response::Response;
 use crate::carriage::request::Request;
 use crate::carriage::route::Route;
-use crate::carriage::method::Method;
+use crate::carriage::codes::HttpCodes;
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone)]
@@ -16,7 +16,7 @@ impl<'a> Router<'a>
     pub fn new(name: &str) -> Router {
         Router {
             routes: Arc::new(Mutex::new(Vec::new())),
-            name: name
+            name
         }
     }
 
@@ -32,7 +32,7 @@ impl<'a> Router<'a>
                 return res; 
             },
             None => {
-                return Response { code: "404", body: "olmadı" };
+                return Response { code: HttpCodes::NotFound, body: "olmadı" };
             }
         };
     }
