@@ -4,13 +4,10 @@ use std::fmt::Debug;
 use serde::{Deserialize};
 
 
-pub trait SimpleBody { }
 #[derive(Clone, Deserialize, Debug)]
 pub struct SimpleBodyData {
     pub data: BTreeMap<String, String>
 }
-
-impl SimpleBody for SimpleBodyData {}
 
 impl SimpleBodyData {
     pub fn new(data: BTreeMap<String, String>) -> SimpleBodyData {

@@ -8,7 +8,7 @@ use carriage::codes::HttpCodes;
 
 #[tokio::main]
 async fn main() {
-    let mut router = Router::new("my route");
+    let mut router = Router::new("my router");
     let mut cr = carriage::Carriage::new("127.0.0.1", "7878", &mut router);
     let test_route: Route = Route::new(Method::POST, "/users", test1);
     let test_route2: Route = Route::new(Method::GET, "/products", test2);
@@ -24,7 +24,7 @@ fn test1(req: Request) -> Response<'static> {
     if body.data["productId"] == "test" {
         println!("güzel product");
     }
-    let res = Response { code: HttpCodes::OK, body: "asdasd"};
+    let res = Response { code: HttpCodes::Unauthorized, body: "asdasd"};
     res
 }
 
