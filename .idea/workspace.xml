@@ -32,11 +32,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3aefe0f-afeb-4742-b29c-177859f2f68c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/carriage.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/carriage.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/carriage/codes.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/carriage/codes.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/carriage/request.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/carriage/request.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/carriage/router.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/carriage/router.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/carriage/thread_pool.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +58,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
@@ -98,7 +94,7 @@
       <option name="presentableId" value="Default" />
       <updated>1605647640472</updated>
       <workItem from="1605647641559" duration="1114000" />
-      <workItem from="1605729266608" duration="3121000" />
+      <workItem from="1605729266608" duration="3953000" />
     </task>
     <servers />
   </component>
@@ -125,21 +121,21 @@
       <screen x="0" y="25" width="1920" height="993" />
     </state>
     <state x="698" y="272" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605730234390" />
-    <state width="1878" height="267" key="GridCell.Tab.0.bottom" timestamp="1605732458141">
+    <state width="1878" height="267" key="GridCell.Tab.0.bottom" timestamp="1605732505432">
       <screen x="0" y="25" width="1920" height="993" />
     </state>
-    <state width="1878" height="267" key="GridCell.Tab.0.bottom/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732458141" />
-    <state width="1878" height="267" key="GridCell.Tab.0.center" timestamp="1605732458140">
+    <state width="1878" height="267" key="GridCell.Tab.0.bottom/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732505432" />
+    <state width="1878" height="267" key="GridCell.Tab.0.center" timestamp="1605732505430">
       <screen x="0" y="25" width="1920" height="993" />
     </state>
-    <state width="1878" height="267" key="GridCell.Tab.0.center/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732458140" />
-    <state width="1878" height="267" key="GridCell.Tab.0.left" timestamp="1605732458139">
+    <state width="1878" height="267" key="GridCell.Tab.0.center/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732505430" />
+    <state width="1878" height="267" key="GridCell.Tab.0.left" timestamp="1605732505429">
       <screen x="0" y="25" width="1920" height="993" />
     </state>
-    <state width="1878" height="267" key="GridCell.Tab.0.left/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732458139" />
-    <state width="1878" height="267" key="GridCell.Tab.0.right" timestamp="1605732458141">
+    <state width="1878" height="267" key="GridCell.Tab.0.left/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732505429" />
+    <state width="1878" height="267" key="GridCell.Tab.0.right" timestamp="1605732505431">
       <screen x="0" y="25" width="1920" height="993" />
     </state>
-    <state width="1878" height="267" key="GridCell.Tab.0.right/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732458141" />
+    <state width="1878" height="267" key="GridCell.Tab.0.right/-1440.62.1440.875/0.25.1920.993@0.25.1920.993" timestamp="1605732505431" />
   </component>
 </project>
