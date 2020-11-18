@@ -4,7 +4,7 @@ use std::fmt::Debug;
 use serde::{Deserialize};
 
 
-#[derive(Clone, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct SimpleBodyData {
     pub data: BTreeMap<String, String>
 }
@@ -17,7 +17,7 @@ impl SimpleBodyData {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Request<'a>
 {
     pub body: SimpleBodyData,

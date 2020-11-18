@@ -21,7 +21,7 @@ pub enum HttpCodes {
   InternalServerError = 500,
   NotImplemented = 501,
   BadGateway = 502,
-  ServiceUnacailable = 503
+  ServiceUncallable = 503
 }
 
 impl Display for HttpCodes {
@@ -38,7 +38,7 @@ impl Display for HttpCodes {
       HttpCodes::InternalServerError => write!(f, "500"),
       HttpCodes::NotImplemented => write!(f, "501"),
       HttpCodes::BadGateway => write!(f, "502"),
-      HttpCodes::ServiceUnacailable => write!(f, "503"),
+      HttpCodes::ServiceUncallable => write!(f, "503"),
     }
   }
 }
