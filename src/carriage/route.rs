@@ -18,7 +18,7 @@ impl Route
         Route {
             method,
             path: path.to_string(),
-            callback: callback
+            callback
         }
     }
 

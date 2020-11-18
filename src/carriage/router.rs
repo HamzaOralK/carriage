@@ -25,13 +25,13 @@ impl Router
 
     pub fn check_routes(&self, req: Request) -> Response {
         let route_index = self.routes.iter().position(|r| r.path == req.url && r.method == *req.method);
-        match route_index {
+        return match route_index {
             Some(r) => { 
                 let res = self.routes[r].process_events(req);
-                return res; 
+                res
             },
             None => {
-                return Response { code: HttpCodes::NotFound, body: "olmadı" };
+                Response { code: HttpCodes::NotFound, body: "olmadı" }
             }
         };
     }
