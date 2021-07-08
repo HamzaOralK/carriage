@@ -1,5 +1,5 @@
 # Carriage
-Carriage is a Rust framework for web applications and API.
+Carriage is a Rust framework for web applications and API that I have developed to learn rust on the way. 
 ## Usage
 ```rust
 #[tokio::main]
@@ -25,11 +25,6 @@ fn test1(req: Request) -> Response<'static> {
 ## Usage
 
 To run `cargo run`, to build `cargo build --release`.
-
-## Upcoming features
-
-Parameter parsing and async running on a single thread.
-
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
